@@ -8,7 +8,15 @@ public class BlackJack {
     public void letsPlay() {
         Scanner s = new Scanner(System.in);
         String input;
+        String name;
+
+        int winCount = 0;
+        int lossCount = 0;
+        System.out.println("What is your name stranger?");
+        name = s.nextLine();
         do {
+            int wager = 0;
+            int wagerTotal = 0;
             int playerCard1 = dealInitialPlayerCards();
             int playerCard2 = dealInitialPlayerCards();
 
@@ -27,10 +35,13 @@ public class BlackJack {
 
             System.out.println(" ");
             System.out.println("Welcome to Akshay's BlackJack Program!");
-            System.out.println("Do you want to play blackJack?");
+            System.out.println("Do you want to play blackJack? " + name);
             input = s.nextLine();
 
-            if (input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("y")) {
+            if (input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yea")) {
+                System.out.println("How much will you wager my friend?");
+                wager = s.nextInt();
+                s.nextLine();
 
                 do {
                     System.out.println("you get a " + playerCard1 + " and a " + playerCard2);
@@ -40,10 +51,14 @@ public class BlackJack {
                     if (playerTotal > 21) {
                         System.out.println("You bust right at the beginning wow!! BAD LUCK!");
                         System.out.println("Try again");
+                        wagerTotal = wagerTotal - wager;
+                        lossCount++;
                     }
                     if (playerTotal == 21) {
                         System.out.println("YOU WIN Right at the beginning! What luck!");
                         System.out.println("lets go again!");
+                        wagerTotal = wagerTotal + wager;
+                        winCount++;
                     }
                 } while (playerTotal >= 21);
 
@@ -63,11 +78,15 @@ public class BlackJack {
                         playerTotal = playerTotal + hitCard;
                         System.out.println("your total is " + playerTotal);
                         if (playerTotal == 21) {
-                            System.out.println("You Win");
+                            System.out.println(name + " Wins!!");
+                            wagerTotal = wagerTotal + wager;
+                            winCount++;
                             break;
                         }
                         if (playerTotal > 21) {
-                            System.out.println("you lose");
+                            System.out.println(name + " loses :(");
+                            wagerTotal = wagerTotal - wager;
+                            lossCount++;
                             break;
                         }
 
@@ -91,10 +110,14 @@ public class BlackJack {
                         int dealerHitCard = dealInitialPlayerCards();
                         if (dealerTotal2 > 21) {
                             System.out.println("The dealer busts! The player wins! \n");
+                            winCount++;
+                            wagerTotal = wagerTotal + wager;
                             break;
                         }
                         if (dealerTotal2 == 21) {
                             System.out.println("The dealer wins! \n");
+                            wagerTotal = wagerTotal - wager;
+                            lossCount++;
                             break;
                         }
                         if (dealerTotal2 < 16 && playerTotal != 21 && playerTotal < 21) {
@@ -111,10 +134,14 @@ public class BlackJack {
                             if (dealerTotal2 > playerTotal) {
                                 System.out.println("the dealer stays");
                                 System.out.println("The dealer wins!\n");
+                                wagerTotal = wagerTotal - wager;
+                                lossCount++;
                                 break;
                             } else {
                                 System.out.println("The dealer decides to stay...");
-                                System.out.println("The player wins!\n");
+                                System.out.println(name + " wins!\n");
+                                wagerTotal = wagerTotal + wager;
+                                winCount++;
                                 break;
                             }
                         }
@@ -129,7 +156,10 @@ public class BlackJack {
                 break;
             }
 
-
+            System.out.println("you have won " + winCount + " times");
+            System.out.println("you have lost " + lossCount + " times");
+            System.out.println("your winnings are " + wagerTotal);
+            System.out.println("");
 
         } while (true);
     }
